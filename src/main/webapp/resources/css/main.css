@@ -1,0 +1,13 @@
+.simpleSearchPane {
+	margin: 10px;
+	width: 100%;
+}
+
+.searchInput {
+	width: 90%;
+	margin-right: 10px;
+}
+
+.searchSubmit {
+	vertical-align:top;
+}
