@@ -47,168 +47,168 @@ import de.fhg.fokus.odp.registry.model.MetadataEnumType;
 @ViewScoped
 public class SearchQuery implements Serializable {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 9056912846758434619L;
+	private static final long serialVersionUID = 9056912846758434619L;
 
-    /** The Constant log. */
-    private static final Logger log = LoggerFactory.getLogger(SearchQuery.class);
+	/** The Constant log. */
+	private static final Logger log = LoggerFactory.getLogger(SearchQuery.class);
 
-    /** The query. */
-    private String query;
+	/** The query. */
+	private String query;
 
-    /** The metadata type. */
-    private String metadataType;
+	/** The metadata type. */
+	private String metadataType;
 
-    private String scmBuildnumber;
+	private String scmBuildnumber;
 
-    private String scmBranch;
+	private String scmBranch;
 
-    /**
-     * Inits the.
-     */
-    @PostConstruct
-    public void init() {
-        ThemeDisplay themeDisplay = LiferayFacesContext.getInstance().getThemeDisplay();
-        String currentPage = themeDisplay.getLayout().getFriendlyURL();
-        if (currentPage.equals("/daten")) {
-            metadataType = MetadataEnumType.DATASET.toField();
-        } else if (currentPage.equals("/apps")) {
-            metadataType = MetadataEnumType.APPLICATION.toField();
-        } else if (currentPage.equals("/dokumente")) {
-            metadataType = MetadataEnumType.DOCUMENT.toField();
-        } else {
-            metadataType = "metadata";
-        }
+	/**
+	 * Inits the.
+	 */
+	@PostConstruct
+	public void init() {
+		ThemeDisplay themeDisplay = LiferayFacesContext.getInstance().getThemeDisplay();
+		String currentPage = themeDisplay.getLayout().getFriendlyURL();
+		if (currentPage.equals("/daten")) {
+			metadataType = MetadataEnumType.DATASET.toField();
+		} else if (currentPage.equals("/apps")) {
+			metadataType = MetadataEnumType.APPLICATION.toField();
+		} else if (currentPage.equals("/dokumente")) {
+			metadataType = MetadataEnumType.DOCUMENT.toField();
+		} else {
+			metadataType = "metadata";
+		}
 
-        scmBuildnumber = PropsUtil.get("ogdd.buildNumber");
-        scmBranch = PropsUtil.get("ogdd.scmBranch");
-    }
+		scmBuildnumber = PropsUtil.get("ogdd.buildNumber");
+		scmBranch = PropsUtil.get("ogdd.scmBranch");
+	}
 
-    /**
-     * Gets the query.
-     * 
-     * @return the query
-     */
-    public String getQuery() {
-        return query;
-    }
+	/**
+	 * Gets the query.
+	 * 
+	 * @return the query
+	 */
+	public String getQuery() {
+		return query;
+	}
 
-    /**
-     * Sets the query.
-     * 
-     * @param query
-     *            the query to set
-     */
-    public void setQuery(String query) {
-        this.query = query;
-    }
+	/**
+	 * Sets the query.
+	 * 
+	 * @param query
+	 *            the query to set
+	 */
+	public void setQuery(String query) {
+		this.query = query;
+	}
 
-    /**
-     * Submit.
-     * 
-     * @return the string
-     */
-    public void submit() {
-        // Query q = new Query();
-        // q.setSearchterm(query);
+	/**
+	 * Submit.
+	 * 
+	 * @return the string
+	 */
+	public void submit() {
+		// Query q = new Query();
+		// q.setSearchterm(query);
 
-        ThemeDisplay themeDisplay = LiferayFacesContext.getInstance().getThemeDisplay();
-        Layout layout = themeDisplay.getLayout();
-        String currentPage = layout.getFriendlyURL();
+		ThemeDisplay themeDisplay = LiferayFacesContext.getInstance().getThemeDisplay();
+		Layout layout = themeDisplay.getLayout();
+		String currentPage = layout.getFriendlyURL();
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Object responseObject = facesContext.getExternalContext().getResponse();
-        if (responseObject != null && responseObject instanceof ActionResponse) {
-            ActionResponse actionResponse = (ActionResponse) responseObject;
-            // actionResponse.setEvent(new QName("http://fokus.fraunhofer.de/odplatform", "querydatasets"), q);
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		Object responseObject = facesContext.getExternalContext().getResponse();
+		if (responseObject != null && responseObject instanceof ActionResponse) {
+			ActionResponse actionResponse = (ActionResponse) responseObject;
+			// actionResponse.setEvent(new QName("http://fokus.fraunhofer.de/odplatform", "querydatasets"), q);
 
-            if (query != null && !query.isEmpty()) {
-                log.debug("searching for '{}'", query);
-                actionResponse.setRenderParameter("searchterm", query);
-            } else {
-                actionResponse.removePublicRenderParameter("searchterm");
-            }
+			if (query != null && !query.isEmpty()) {
+				log.debug("searching for '{}'", query);
+				actionResponse.setRenderParameter("searchterm", query);
+			} else {
+				actionResponse.removePublicRenderParameter("searchterm");
+			}
 
-            actionResponse.removePublicRenderParameter("searchcategory");
-        }
+			actionResponse.removePublicRenderParameter("searchcategory");
+		}
 
-        // if (currentPage.equals("/home")) {
-        String location = themeDisplay.getPortalURL();
-        if (layout.isPublicLayout()) {
-            location += themeDisplay.getPathFriendlyURLPublic();
-        }
+		// if (currentPage.equals("/home")) {
+		String location = themeDisplay.getPortalURL();
+		if (layout.isPublicLayout()) {
+			location += themeDisplay.getPathFriendlyURLPublic();
+		}
 
-        try {
-            location += layout.hasScopeGroup() ? layout.getScopeGroup().getFriendlyURL() : layout.getGroup().getFriendlyURL();
-            if (currentPage.equals("/home")) {
-                location += "/suchen";
-            } else {
-                location += layout.getFriendlyURL();
-            }
-        } catch (PortalException e) {
-            log.error("add group to url", e);
-        } catch (SystemException e) {
-            log.error("add group to url", e);
-        }
+		try {
+			location += layout.hasScopeGroup() ? layout.getScopeGroup().getFriendlyURL() : layout.getGroup().getFriendlyURL();
+			if (currentPage.equals("/home")) {
+				location += "/suchen";
+			} else {
+				location += layout.getFriendlyURL();
+			}
+		} catch (PortalException e) {
+			log.error("add group to url", e);
+		} catch (SystemException e) {
+			log.error("add group to url", e);
+		}
 
-        try {
-            facesContext.getExternalContext().redirect(location);
-        } catch (IOException e) {
-            log.error("redirect to result page", e);
-        }
-        // }
+		try {
+			facesContext.getExternalContext().redirect(location);
+		} catch (IOException e) {
+			log.error("redirect to result page", e);
+		}
+		// }
 
-    }
+	}
 
-    /**
-     * Gets the metadata type.
-     * 
-     * @return the metadata type
-     */
-    public String getMetadataType() {
-        return metadataType;
-    }
+	/**
+	 * Gets the metadata type.
+	 * 
+	 * @return the metadata type
+	 */
+	public String getMetadataType() {
+		return metadataType;
+	}
 
-    /**
-     * Sets the metadata type.
-     * 
-     * @param metadataType
-     *            the new metadata type
-     */
-    public void setMetadataType(String metadataType) {
-        this.metadataType = metadataType;
-    }
+	/**
+	 * Sets the metadata type.
+	 * 
+	 * @param metadataType
+	 *            the new metadata type
+	 */
+	public void setMetadataType(String metadataType) {
+		this.metadataType = metadataType;
+	}
 
-    /**
-     * @return the scmBuildnumber
-     */
-    public String getScmBuildnumber() {
-        return scmBuildnumber;
-    }
+	/**
+	 * @return the scmBuildnumber
+	 */
+	public String getScmBuildnumber() {
+		return scmBuildnumber;
+	}
 
-    /**
-     * @param scmBuildnumber
-     *            the scmBuildnumber to set
-     */
-    public void setScmBuildnumber(String scmBuildnumber) {
-        this.scmBuildnumber = scmBuildnumber;
-    }
+	/**
+	 * @param scmBuildnumber
+	 *            the scmBuildnumber to set
+	 */
+	public void setScmBuildnumber(String scmBuildnumber) {
+		this.scmBuildnumber = scmBuildnumber;
+	}
 
-    /**
-     * @return the scmBranch
-     */
-    public String getScmBranch() {
-        return scmBranch;
-    }
+	/**
+	 * @return the scmBranch
+	 */
+	public String getScmBranch() {
+		return scmBranch;
+	}
 
-    /**
-     * @param scmBranch
-     *            the scmBranch to set
-     */
-    public void setScmBranch(String scmBranch) {
-        this.scmBranch = scmBranch;
-    }
+	/**
+	 * @param scmBranch
+	 *            the scmBranch to set
+	 */
+	public void setScmBranch(String scmBranch) {
+		this.scmBranch = scmBranch;
+	}
 
 }
