@@ -11,7 +11,7 @@
 	<packaging>war</packaging>
 	<name>Search Portlet</name>
 	<scm>
-		<developerConnection>scm:git:git://gitlab.fokus.fraunhofer.de:odp-search-gui-portlet</developerConnection>
+		<developerConnection>scm:git:git://github.com:fraunhoferfokus/odp-search-gui-portlet.git</developerConnection>
 	</scm>
 	<build>
 		<finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
