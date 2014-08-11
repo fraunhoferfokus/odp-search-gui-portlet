@@ -11,3 +11,9 @@
 .searchSubmit {
 	vertical-align:top;
 }
+
+
+.ui-autocomplete input {
+    width: 98%;
+	
+}

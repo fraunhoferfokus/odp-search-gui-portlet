@@ -21,6 +21,8 @@ package de.fhg.fokus.odp.portal.searchgui;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -39,6 +41,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.theme.ThemeDisplay;
 
 import de.fhg.fokus.odp.registry.model.MetadataEnumType;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * The Class SearchQuery.
@@ -53,10 +56,12 @@ public class SearchQuery implements Serializable {
 	private static final long serialVersionUID = 9056912846758434619L;
 
 	/** The Constant log. */
-	private static final Logger log = LoggerFactory.getLogger(SearchQuery.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(SearchQuery.class);
 
 	/** The query. */
 	private String query;
+	private String originalQuery;
 
 	/** The metadata type. */
 	private String metadataType;
@@ -65,12 +70,19 @@ public class SearchQuery implements Serializable {
 
 	private String scmBranch;
 
+	/** The registry client. MSG */
+	// @ManagedProperty("#{registryClient}")
+	private RegistryClient registryClient;
+
+	/** The registry client. MSG END */
+
 	/**
 	 * Inits the.
 	 */
 	@PostConstruct
 	public void init() {
-		ThemeDisplay themeDisplay = LiferayFacesContext.getInstance().getThemeDisplay();
+		ThemeDisplay themeDisplay = LiferayFacesContext.getInstance()
+				.getThemeDisplay();
 		String currentPage = themeDisplay.getLayout().getFriendlyURL();
 		if (currentPage.equals("/daten")) {
 			metadataType = MetadataEnumType.DATASET.toField();
@@ -114,7 +126,8 @@ public class SearchQuery implements Serializable {
 		// Query q = new Query();
 		// q.setSearchterm(query);
 
-		ThemeDisplay themeDisplay = LiferayFacesContext.getInstance().getThemeDisplay();
+		ThemeDisplay themeDisplay = LiferayFacesContext.getInstance()
+				.getThemeDisplay();
 		Layout layout = themeDisplay.getLayout();
 		String currentPage = layout.getFriendlyURL();
 
@@ -122,11 +135,21 @@ public class SearchQuery implements Serializable {
 		Object responseObject = facesContext.getExternalContext().getResponse();
 		if (responseObject != null && responseObject instanceof ActionResponse) {
 			ActionResponse actionResponse = (ActionResponse) responseObject;
-			// actionResponse.setEvent(new QName("http://fokus.fraunhofer.de/odplatform", "querydatasets"), q);
+			// actionResponse.setEvent(new
+			// QName("http://fokus.fraunhofer.de/odplatform", "querydatasets"),
+			// q);
 
 			if (query != null && !query.isEmpty()) {
-				log.debug("searching for '{}'", query);
-				actionResponse.setRenderParameter("searchterm", query);
+				log.info("searching for '{}'", query);
+				setOriginalQuery(query);
+				// String escapedQuery = StringEscapeUtils.escapeHtml(query);
+				String escapedQuery = StringUtils.escapeColonString(query);
+				// msg 8.5.2014 actionResponse.setRenderParameter("searchterm",
+				// query);
+				escapedQuery = StringUtils.removeBlankStrings(query);
+				log.info("escapedQuery:" + escapedQuery);
+
+				actionResponse.setRenderParameter("searchterm", escapedQuery);
 			} else {
 				actionResponse.removePublicRenderParameter("searchterm");
 			}
@@ -141,7 +164,8 @@ public class SearchQuery implements Serializable {
 		}
 
 		try {
-			location += layout.hasScopeGroup() ? layout.getScopeGroup().getFriendlyURL() : layout.getGroup().getFriendlyURL();
+			location += layout.hasScopeGroup() ? layout.getScopeGroup()
+					.getFriendlyURL() : layout.getGroup().getFriendlyURL();
 			if (currentPage.equals("/home")) {
 				location += "/suchen";
 			} else {
@@ -209,6 +233,34 @@ public class SearchQuery implements Serializable {
 	 */
 	public void setScmBranch(String scmBranch) {
 		this.scmBranch = scmBranch;
+	}
+
+	/**
+	 * Basic Complete TEST
+	 */
+	public List<String> complete(String fragment) {
+		List<String> results = new ArrayList<String>();
+
+		/*
+		 * for (int i = 0; i < 10; i++) { results.add(fragment + i); }
+		 * 
+		 * return results;
+		 */
+
+		registryClient = new RegistryClient();
+		registryClient.init();
+		return results = registryClient.getInstance().autoSuggestMetadata(
+				fragment);
+	}
+
+	public String getOriginalQuery() {
+		log.info("getOriginalQuery:" + originalQuery);
+		return originalQuery;
+	}
+
+	public void setOriginalQuery(String originalQuery) {
+		log.info("setOriginalQuery:" + originalQuery);
+		this.originalQuery = originalQuery;
 	}
 
 }

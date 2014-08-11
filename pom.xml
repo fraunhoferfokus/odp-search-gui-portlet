@@ -11,7 +11,7 @@
 	<packaging>war</packaging>
 	<name>Search Portlet</name>
 	<scm>
-		<developerConnection>scm:git:git://github.com:fraunhoferfokus/odp-search-gui-portlet.git</developerConnection>
+		<developerConnection>scm:git:git://gitlab.fokus.fraunhofer.de:odp-search-gui-portlet</developerConnection>
 	</scm>
 	<build>
 		<finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
@@ -29,6 +29,11 @@
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>4.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.liferay.faces</groupId>
 			<artifactId>liferay-faces-alloy</artifactId>
@@ -83,6 +88,11 @@
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.seam</groupId>

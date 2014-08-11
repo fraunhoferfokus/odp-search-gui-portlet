@@ -1,37 +1,44 @@
 <?xml version="1.0"?>
 
 <f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html">
-
-    <h:head>
-        <link href="#{request.contextPath}/resources/css/main.css"
-              rel="stylesheet" type="text/css" />
-    </h:head>
-
-    <h:body>
-        <h:form>
-            <div class="simpleSearchPane">
-                <h:inputText value="#{searchQuery.query}" styleClass="searchInput datasets"
-                             id="searchinputDataset" placeholder="#{i18n['od.search.dataset']}"
-                             rendered="#{searchQuery.metadataType eq 'datensatz'}" />
-                <h:inputText value="#{searchQuery.query}" styleClass="searchInput documents"
-                             id="searchinputDocument"
-                             placeholder="#{i18n['od.search.document']}"
-                             rendered="#{searchQuery.metadataType eq 'dokument'}" />
-                <h:inputText value="#{searchQuery.query}" styleClass="searchInput apps"
-                             id="searchinputApp" placeholder="#{i18n['od.search.app']}"
-                             rendered="#{searchQuery.metadataType eq 'app'}" />
-                <h:inputText value="#{searchQuery.query}" styleClass="searchInput"
-                             id="searchinputMetadata"
-                             placeholder="#{i18n['od.search.metadata']}"
-                             rendered="#{searchQuery.metadataType eq 'metadata'}" />
-                <h:commandButton action="#{searchQuery.submit}"
-                                 styleClass="btn btn-primary" id="searchinputsubmit"
-                                 style="width:1.2em;" alt="#{i18n['od.search.button.alt']}" title="#{i18n['od.search.button.alt']}"/>
-            </div>
-        </h:form>
-    </h:body>
-
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<link href="#{request.contextPath}/resources/css/main.css"
+			rel="stylesheet" type="text/css" />
+	</h:head>
+	<h:body>
+		<h:form>
+			<div class="simpleSearchPane">
+				<h:inputText value="#{searchQuery.query}"
+					styleClass="searchInput datasets" id="searchinputDataset"
+					converter="queryConverter"
+					rendered="#{searchQuery.metadataType eq 'datensatz'}" />
+				<p:watermark for="searchinputDataset"
+					value="#{i18n['od.search.dataset']}" />
+				<h:inputText value="#{searchQuery.query}"
+					styleClass="searchInput documents" id="searchinputDocument"
+					converter="queryConverter"
+					rendered="#{searchQuery.metadataType eq 'dokument'}" />
+				<p:watermark for="searchinputDocument"
+					value="#{i18n['od.search.document']}" />
+				<h:inputText value="#{searchQuery.query}"
+					styleClass="searchInput apps" id="searchinputApp"
+					converter="queryConverter"
+					rendered="#{searchQuery.metadataType eq 'app'}" />
+				<p:watermark for="searchinputApp" value="#{i18n['od.search.app']}" />
+				<h:inputText value="#{searchQuery.query}" styleClass="searchInput"
+					id="searchinputMetadata" converter="queryConverter"
+					rendered="#{searchQuery.metadataType eq 'metadata'}" />
+				<p:watermark for="searchinputMetadata"
+					value="#{i18n['od.search.metadata']}" />
+				<h:commandButton action="#{searchQuery.submit}"
+					styleClass="btn btn-primary" id="searchinputsubmit"
+					style="width:1.2em;" alt="#{i18n['od.search.button.alt']}"
+					title="#{i18n['od.search.button.alt']}" />
+			</div>
+		</h:form>
+	</h:body>
 </f:view>
